@@ -1,0 +1,15 @@
+push.sh
+.idea/*
+data/*
+**/__pycache__/*
+**/.vs/*
+**/ConsoleApplication1/*
+
+interview/*
+reference/*
+**/t/*
+**/tmp/*
+**/test/*
+
+
+

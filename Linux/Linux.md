@@ -14,16 +14,20 @@
 - df 查看磁盘驱动器的可用空间
 - pwd  打印当前目录
 - watch -n 5 nvidia-smi  # 查看显卡信息，每隔五秒刷新一次显示
-- kill PID：杀死某进程。kill -s 9 PID：强制杀死进程
 - du -h或du -h --max-depth=1：linux中查看各文件夹及其子文件夹大小命令，后者以当前目录为节点，只往目录树下查找一层，即当前目录下的文件夹（不包括子文件夹）。
 - cd 切换目录
+- touch xx.md 创建空文件 xx.md
 - top 动态显示当前耗费资源最多的进程信息
 - ping 测试网速
 - clear 清屏
 - reboot 重启
+- shutdown 关机
+- netstat 显示网络相关信息
+- ifconfig 显示或配置网络设备
 ## linux常用命令
 ### ls
 - ls | wc -w :查看当前目录下有多少个文件及文件夹（不包括子文件夹）
+	- wc 统计文本中行数、字数、字符数，例如 wc xx.md（也等于 wc -lwc xx.md），打印 xx.md 文件里的行数、单词数、字符数
 - ls ~/ 列出来 home 下的文件夹
 - ls -la 以长格式(-l)列出所有的(-a)文件夹，也可以写为 ls -l -a
 	- ls -laF 用长格式列出所有的文件夹并且在每一个列出的名字后面加上类型指示符（类如是目录名字后面会加一个斜杠），也可写成 ls -l -a -F
@@ -114,14 +118,86 @@ cat 1a/2a.txt | wc -l -w  # 1a/2a.txt 的内容是 "hello world!"，该命令打
 
 ```
 
+### 更改文件权限
+八进制数字表示法
+- 文件类型
+- 权限属性
+- 权限属性实例
+```
+drwxrwxr-x 3 jinbo jinbo  4096 11月 26 09:31 1a
+---xrwxrwx 1 jinbo jinbo   482 11月 26 09:55 1a.txt
+drwxrwxr-x 4 jinbo jinbo  4096 11月 26 13:53 1b
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:17 1c
+-rwxrwxrwx 1 jinbo jinbo   475 11月 26 09:56 1d.md
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:59 1e
+-rwxrwxrwx 1 jinbo jinbo 28205 9月  16 10:56 1e.jpeg
+-rwxrwxrwx 1 jinbo jinbo    23 11月 26 20:32 hello.py
+lrwxrwxrwx 1 jinbo jinbo     2 11月 26 15:00 link -> 1c
+-rw-rw-r-- 1 jinbo jinbo   544 11月 26 16:13 ls.txt
+-rw-rw-r-- 1 jinbo jinbo   960 11月 26 15:40 my_cat.txt
+-rw-rw-r-- 1 jinbo jinbo     7 11月 26 20:30 sh.sh
+-rw-rw-r-- 1 jinbo jinbo   800 11月 26 15:27 tree_output.txt
 
+```
 
+```shell
+$ chmod 000 1a.txt
+$ cat 1a.txt
+cat: 1a.txt: 权限不够
+$ chmod 777 1a.txt
+cat 1a.txt  # 现在可以访问了
+$ chmod 000 1a  # 改变文件夹权限
+$ less 1a/1a.txt
+1a/1a.txt: 权限不够  # 虽然文件的权限是 -rwxrwxrwx，但文件夹的权限是 d---------，文件夹都不能进去，文件自然访问不了
 
+```
 
+符号表示法
+u
+g
+o
+a
 
+### 进程
+- ps #显示当前终端进程
+- ps x # 显示所有终端所控制的进程，TTY中的?表示表示没有控制终端，STAT是state的缩写，显示的是当前进程的状态,S表示睡眠状态，进程不在运行，而是在等待。
 
+```
+ PID TTY      STAT   TIME COMMAND
+ 2740 pts/2    Ss     0:00 bash
+ 2858 ?        Sl     0:00 /usr/lib/x86_64-linux-gnu/deja-dup/deja-dup-monitor
+ 6990 ?        Sl     0:14 /usr/lib/firefox/firefox
+ 7061 ?        Sl     0:08 /usr/lib/firefox/firefox -contentproc -childID 1 -isForBrowser -prefsL
+ 7122 ?        Sl     0:00 /usr/lib/firefox/firefox -contentproc -childID 2 -isForBrowser -prefsL
+ 7153 ?        Sl     0:08 /usr/lib/firefox/firefox -contentproc -childID 3 -isForBrowser -prefsL
+ 8296 pts/2    R+     0:00 ps -x
+```
+- top #动态查询进程信息
+**使程序在后台运行**
+```shell
+$ xlogo  # 显示一个包含X标识的可缩放窗口
+# 但是这样 shell 提示符没有返回，这是因为 shell 正在等待着 xlogo 程序结束，若用 Ctrl+C 关闭 xlogo，shell 提示符就返回了。
+$ xlogo & # 让 xlogo 在后台运行， shell 返回 [1] 8798
+$ ps
+ PID TTY          TIME CMD
+ 2740 pts/2    00:00:00 bash
+ 8798 pts/2    00:00:00 xlogo
+ 8811 pts/2    00:00:00 ps
 
-
+```
+**杀死进程**
+```shell
+kill -2 8798  # 杀死 PID 为 8798 的进程，-2 的效果等同于 ctrl+C，-20的效果等同于 ctrl+z 暂停进程
+# kill 默认执行 kill -15， -15 是终止信号
+# -9：强制杀死进程，该信号不会发送给目标进程，而是由内核终止了目标进程，
+# 当以这种方式被终止，目标进程将没有机会对自己进行清理或者对当前结果进行保存。
+# -9 是没有办法的最后选择。
+```
+### 网络
+- ping # 向网络主机发送数据包，用来检测网络链接是否正常
+```
+ping www.baidu.com
+```
 ### 推荐/参考链接
 
 - [Linux Tools Quick Tutorial](https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html) 

@@ -1,0 +1,11 @@
+总用量 64
+-rw-rw-r-- 1 jinbo jinbo   800 11月 26 15:27 tree_output.txt
+-rw-rw-r-- 1 jinbo jinbo   960 11月 26 15:40 my_cat.txt
+lrwxrwxrwx 1 jinbo jinbo     2 11月 26 15:00 link -> 1c
+-rwxrwxrwx 1 jinbo jinbo 28205 9月  16 10:56 1e.jpeg
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:59 1e
+-rw-rw-r-- 1 jinbo jinbo   475 11月 26 09:56 1d.md
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:17 1c
+drwxrwxr-x 4 jinbo jinbo  4096 11月 26 13:53 1b
+-rw-rw-r-- 1 jinbo jinbo   482 11月 26 09:55 1a.txt
+drwxrwxr-x 3 jinbo jinbo  4096 11月 26 09:31 1a

@@ -1,0 +1,28 @@
+总用量 56
+-rw-rw-r-- 1 jinbo jinbo     0 11月 26 15:26 tree_output.txt
+lrwxrwxrwx 1 jinbo jinbo     2 11月 26 15:00 link -> 1c
+-rwxrwxrwx 1 jinbo jinbo 28205 9月  16 10:56 1e.jpeg
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:59 1e
+-rw-rw-r-- 1 jinbo jinbo   475 11月 26 09:56 1d.md
+drwxrwxr-x 2 jinbo jinbo  4096 11月 26 14:17 1c
+drwxrwxr-x 4 jinbo jinbo  4096 11月 26 13:53 1b
+-rw-rw-r-- 1 jinbo jinbo   482 11月 26 09:55 1a.txt
+drwxrwxr-x 3 jinbo jinbo  4096 11月 26 09:31 1a
+.
+├── 1a
+│   ├── 2a
+│   └── 2a.txt
+├── 1a.txt
+├── 1b
+│   ├── 2a
+│   └── 2b
+├── 1c
+│   ├── 1a.txt
+│   └── 2b.md
+├── 1d.md
+├── 1e
+├── 1e.jpeg
+├── link -> 1c
+└── tree_output.txt
+
+8 directories, 7 files

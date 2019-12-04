@@ -4,73 +4,9 @@
 
 ### 栈
 
-﻿线性表，右为头左为尾，上为顶下为底。
-
-栈（stack）是限定仅在表尾进行插入或删除的线性表。其中添加/移除新项总发生在同一端。
-
-这一端通常称为“栈顶”(top，表尾端)。与栈顶对应的端称为“栈底”（bottom，表头端）。 
-
-栈的底部很重要，因为在栈中靠近底部的项是存储时间最长的。最近添加的项是最先移除的。 
-
-这种排序原则有时被称为** LIFO( Last In First Out，即后进先出)**。 
-
-可以把栈理解为在桌子上，把书一本本叠起来。拿起一本书放在书堆的最上面，当然也只有先拿走上面的书才能拿走下面的书。
-
-**栈的基本操作**
-
-- Stack() 创建一个空的新栈。 它不需要参数，并返回一个空栈。
-- push(item)：在栈的最上方插入元素
-- pop()：返回栈最上方的元素，并将其删除
-- isEmpty()：查询栈是否为空
-- top()，或者称为 peek()：返回栈最上方的元素，并不删除
-- size()，返回 item 数量。
+﻿
 
 ### 队列
-
-队列（queue）是一种先进先出的（FIFO，First In First Out）线性表。只允许在表的一端插入而在另一端删除。
-其中允许插入的一端称为队尾(rear)，允许删除的一端称为队头（front）。
-当一个元素从队尾进入队列时，一直向队头移动，直到它成为下一个需要移除的元素为止。
-
-**队列的基本操作**
-
-- Queue() 创建一个空的新队列。 它不需要参数，并返回一个空队列。
-- enqueue(item) 将新项添加到队尾。 它需要 item 作为参数，并不返回任何内容。
-- dequeue() 从队头移除项。它不需要参数并返回 item。 队列被修改。
-- isEmpty() 查看队列是否为空。它不需要参数，并返回布尔值。
-- size() 返回队列中的项数。它不需要参数，并返回一个整数。
-
-**双端队列**
-
-双端队列（deque）是限定插入和删除操作在表的两端的线性表。它的两个端点（首部和尾部）都可以进行添加和删除操作。  
-在某种意义上，这种混合线性结构提供了单个数据结构中的栈和队列的所有能力。但在实际应用中远不及栈和队列有用。
-
-**双端队列的基本操作**
-
-- Deque() 创建一个空的新 deque。它不需要参数，并返回空的 deque。
-- addFront(item) 将一个新项添加到 deque 的首部。它需要 item 参数 并不返回任何内容。
-- addRear(item) 将一个新项添加到 deque 的尾部。它需要 item 参数并不返回任何内容。
-- removeFront() 从 deque 中删除首项。它不需要参数并返回 item。deque 被修改。
-- removeRear() 从 deque 中删除尾项。它不需要参数并返回 item。deque 被修改。
-- isEmpty() 测试 deque 是否为空。它不需要参数，并返回布尔值。
-- size() 返回 deque 中的项数。它不需要参数，并返回一个整数。
-
-**[循环队列](https://www.cnblogs.com/curo0119/p/8608606.html)**
-
-在用数组实现队列的时候，当有元素出列，头指针front就向后移动，此时队列前面的空间就空了出来。
-每当添加元素，尾指针rear+1，当尾指针rear移动到LENGTH时（数组的最大下标处的地址），再入队会发生假溢出。
-也就是说实际上我们开辟的数组还有剩余空间，却因为rear越界表现为溢出。  
-为了更合理的利用空间，将队列的首尾相连接。这样当rear移动到LENGTH时，会再从0开始循环。
-那当什么时候队列满呢？当rear等于front的时候，无法判断队列为空还是满。有两个方法：  
-办法一是设置一个标志变量flag，当front == rear,且flag = 0时为队列空，当front == rear,且flag= 1时为队列满。  
-办法二牺牲一个存储空间，front前面不存数据，当rear在front前面的时候就是满了。
-
-**循环队列的基本操作**
-
-- LoopQueue(size) 创建一个空的新队列，size用于指定循环队列的大小，不输入参数size使用默认值。
-- enqueue(item) 将新项添加到队尾。 它需要 item 作为参数，并不返回任何内容。
-- dequeue() 从队头移除项。它不需要参数并返回 item。 队列被修改。
-- isEmpty() 查看队列是否为空。它不需要参数，并返回布尔值。
-- size() 或者 \_\_len\_\_() 返回队列中的项数。它不需要参数，并返回一个整数。
 
 **队空与队满**
 
@@ -78,18 +14,6 @@
 队满条件为：(rear+1)%QueueSize==front
 
 ### 链表
-
-**单链表**
-
-- ist() 创建一个新的空单链表，无返回值。
-- add(item) 在链表头部插入元素，需要item作为参数，无返回值。
-- append(item) 在链表尾部添加元素，需要item作为参数，无返回值。
-- insert(pos, item) 在指定位置 pos 插入元素 item。无返回值。
-- remove(item) 删除节点值等于 item 的节点。一般无返回值。若没有该值，返回 -1，表示出错。
-- search(item) 查找节点是否存在，返回布尔值。空列表返回False。
-- isEmpty() 链表是否为空，返回布尔值
-- size() 或者 \_\_len\_\_()，返回链表元素个数。
-- traverse() 遍历整个链表，无返回值。
 
 **循环链表**
 
@@ -137,6 +61,8 @@
 要知道为什么这些特性确保了这个结果，注意到性质3导致了路径不能有两个毗连的红色节点就足够了。最短的可能路径都是黑色节点，最长的可能路径有交替的红色和黑色节点。因为根据性质4所有最长的路径都有相同数目的黑色节点，这就表明了没有路径能多于任何其他路径的两倍长。
 
 ## 排序
+
+![](sources\sort.jpg)
 
 ### 插入排序
 
@@ -278,7 +204,7 @@ void swap(int &x, int &y)
 
 ### 交换两个字符串
 
-```
+```C++
 // 引用符号 & 去掉就不能交换了，用引用指针代表传的指针是实参而不是形参，s1, s2便不是一个临时的拷贝。
 void swap(char *&s1, char *&s2)  
 {
@@ -498,3 +424,207 @@ char *myStrcat(char *dst, char *src)
 例子：将` ”I am from Shanghai“ `转换为 `”Shanghai from an I“`。
 
 思路：字符指针 start 指向单词首位，字符指针 end 指向空格的前一位，对 start 和 end 区间的单词反转。则原单词为转换为 `”I ma morf iahgnahs“`，再对整个字符串进行反转。
+
+## 链表
+
+### 反向打印链表
+
+> 输入一个链表，按链表从尾到头的顺序返回一个`ArrayList。 `
+>
+> 函数定义`vector<int> printListFromTailToHead(ListNode* head)`
+
+```C++
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(nullptr) {
+*        }
+*  };
+*/
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        vector<int> vec;
+        if(head == nullptr)
+            return vec;
+        
+        stack<ListNode*> stk;
+        ListNode* pNode = head;
+        
+        while(pNode)
+        {
+            stk.push(pNode);
+            pNode = pNode->next;
+        }
+        
+        while(!stk.empty())
+        {
+            pNode = stk.top();
+            vec.push_back(pNode->val);
+            stk.pop();
+        }
+        return vec;
+    }
+};
+```
+
+### 删除链表的节点
+
+> 给定单向链表的头指针和节点指针，定义一个函数在O(1)时间内删除该节点。
+>
+> 函数定义`deleteNode(ListNode* pListHead, ListNode* pToBeDeleted)`
+
+**提示：**
+
+*链表 a->b->c->d->e->f，假设要删除 d，只需要将 d->val 赋给 c->val，然后让 c->next = d->next 就好。*
+
+```C++
+void deleteNode(ListNode* pListHead, ListNode* pToBeDeleted)
+{
+	if (pListHead == nullptr || pToBeDeleted == nullptr)
+		return;
+	if (pToBeDeleted->next != nullptr)  // 要删除的节点不是尾节点
+	{
+		ListNode* pNext = pToBeDeleted->next;
+		pToBeDeleted->val = pNext->val;
+		pToBeDeleted->next = pNext->next;
+
+		delete pNext;
+		pNext = nullptr;
+	}
+	else if(pListHead == pToBeDeleted)	// 链表只有一个节点，删除头节点
+	{
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+		pListHead = nullptr;
+	}
+	else								// 链表中有多个节点，且要删除的节点是尾节点
+	{
+		ListNode* pNode = pListHead;
+		while (pNode->next != pToBeDeleted)
+		{
+			pNode = pNode->next;
+		}
+		pNode->next = nullptr;
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+	}
+}
+```
+
+### 删除链表中重复的节点
+
+> 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5 
+>
+>`ListNode* deleteDuplication(ListNode* pHead)`
+
+```C++
+// 递归方法本地调试通过，牛客网栈溢出
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* pHead)
+    {
+        if(pHead == nullptr || pHead->next == nullptr)  // 链表为空或者只有一个节点
+            return pHead;
+        ListNode* pNext = pHead->next;
+        if(pHead->val != pNext->val)
+        {
+            pHead->next = deleteDuplication(pNext);
+            return pHead;
+        }
+        while(pHead->val == pNext->val && pNext != nullptr)
+        {
+            pNext = pNext->next;
+        }
+        if(pHead->val != pNext->val)        // 说明 pHead 到 pNext 之前的值都重复，应该删去
+        {
+            pHead = deleteDuplication(pNext);
+            return pHead;
+        }
+        else								// 从 pHead 到尾节点的节点值都重复，全部删去
+        {
+            pHead = nullptr;
+            return pHead;
+        }
+    }
+};
+```
+
+### 链表中倒数第 k 个节点
+
+> 输入一个链表，输出该链表中倒数第k个结点。 
+>
+>`ListNode* FindKthToTail(ListNode* pListHead, unsigned int k)`
+
+**提示：**
+
+*倒数第 k 个结点就意味着该结点再走 k-1 次就可以到达尾结点，那么当一个快指针先从头结点处移动 k-1 次，然后快指针与慢指针同时移动，当快指针到底尾节点，慢指针就刚好到达了倒数第 k 个结点*
+
+```C++
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        if (pListHead == nullptr || k == 0)  // 倒数第 0 个节点不存在
+            return nullptr;
+        ListNode* pSlow = pListHead;
+        ListNode* pFast = pListHead;
+        unsigned int cnt = 1;
+        while (cnt < k)
+        {
+            if (pFast->next)    
+                pFast = pFast->next;
+            else            // 当 k 超过链表长度的时候
+                return nullptr;
+            cnt++;
+        }
+        while(pFast->next)
+        {
+            pFast = pFast->next;
+            pSlow = pSlow->next;
+        }
+        return pSlow;
+    }
+};
+```
+
+
+
+## 其他
+
+### 用两个栈实现队列
+
+```C++
+class Solution
+{
+public:
+    void push(int node) {
+        stack1.push(node);
+    }
+
+    int pop() {
+        if(stack2.empty())
+        {
+            while(!stack1.empty())
+            {
+                int data = stack1.top();
+                stack2.push(data);
+                stack1.pop();
+            }
+        }
+        // 将 stack1 里的数据放入栈 stack2 后，stack2还是空的，
+        // 说明 stack1 本身就是空的，此时就不能出队了,应该报错
+        if(stack2.empty())    
+            cout << "queue is empty" << endl;
+        int data = stack2.top();
+        stack2.pop();
+        return data;
+    }
+
+private:
+    stack<int> stack1;        // 队尾，进队
+    stack<int> stack2;        // 队头，出队
+};
+```
+

@@ -22,6 +22,10 @@ public:
 	void deleteNode(int pos);			// 删除指定位置的结点
 	int length();						// 获取链表的长度
 	void printList();					// 打印链表
+	Node* gethead()
+	{
+		return head;
+	}
 };
 List::List()
 {
@@ -46,7 +50,7 @@ void List::insert(int value, int pos)
 		append(value);
 		return;
 	}
-	
+
 	Node* p = head;
 	int index = 0;	// 第一个结点的索引为 0
 	while (p)
@@ -56,7 +60,7 @@ void List::insert(int value, int pos)
 			Node *node = new Node(value);
 			node->next = p->next;
 			p->next = node;
-			break;	
+			break;
 		}
 		p = p->next;
 		index++;
@@ -121,8 +125,34 @@ void List::printList()
 	{
 		cout << p->data << " -> ";
 		p = p->next;
-	}	
+	}
 	cout << "nullptr" << endl;
+}
+
+Node* deleteDuplication(Node* pHead)
+{
+	if (pHead == nullptr || pHead->next == nullptr)  // 链表为空或者只有一个节点
+		return pHead;
+	Node* pNext = pHead->next;
+	if (pHead->data != pNext->data)
+	{
+		pHead->next = deleteDuplication(pNext);
+		return pHead;
+	}
+	while (pHead->data == pNext->data && pNext != nullptr)
+	{
+		pNext = pNext->next;
+	}
+	if (pHead->data != pNext->data)                     // 说明 pHead 到 pNext 之前的值都重复，应该删去
+	{
+		pHead = deleteDuplication(pNext);
+		return pHead;
+	}
+	else
+	{
+		pHead = nullptr;
+		return pHead;
+	}
 }
 
 int main()
@@ -139,6 +169,13 @@ int main()
 	mylist.deleteNode(0);
 	mylist.deleteNode(2);
 	mylist.deleteNode(4);
+	mylist.append(7);
+	mylist.append(7);
+	mylist.append(8);
+	mylist.append(8);
+	mylist.append(9);
+	deleteDuplication(mylist.gethead());
+	mylist.printList();
 	//mylist
 
 

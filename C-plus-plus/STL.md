@@ -8,7 +8,7 @@ STL 主要由两部分组成：一是容器，二是操作容器的泛型算法�
 
 - == 和 != 返回 true 或者 false，两个容器是否相等
 
-- = 赋值，将一个容易赋给另一个容器
+- = 赋值，将一个容器赋给另一个容器
 - empty()
 - size()
 - clear() 删除所有元素
@@ -19,13 +19,15 @@ STL 主要由两部分组成：一是容器，二是操作容器的泛型算法�
 
 【ESC 76】
 
-### 使用顺序性容器
-
-顺序性容器就是维护一组排列有序，类型相同的元素。vector 和 list 是两个最主要的顺序性容器。
+### 序列容器
 
 - vector 以一块连续性内存来存放数据，适合随机访问，不适合插入/删除（如果在末尾插入/删除效率一样，在中间插入/删除就需要移动元素）
 - list 以双向链接而非连续内存来存储内容，适合插入删除而不适合随机访问。
-- deque 以连续内存存储数据，但是只能对最前端/末端的元素进行插入/删除操作
+- deque (双向队列)以连续内存存储数据，但是只能对最前端/末端的元素进行插入/删除操作
+- queue 队列
+- stack 栈
+
+<img src="sources\qe_vec.png" style="zoom: 100%;" />
 
 #### vector
 
@@ -35,14 +37,34 @@ STL 主要由两部分组成：一是容器，二是操作容器的泛型算法�
 - vector<int> vec(begin,end):复制[begin,end)区间内另一个数组的元素到vector中，begin和end为指针或者迭代器
 - vec.push_back()
 - vec.pop_back()
+- vec.insert(it, val)
 
 ```C++
-vector<vector<char> >vec(row,vector<char>(col,'#'));//二维数组初始化
+vector<vector<char> >vec(row, vector<char>(col,'#'));//二维数组初始化
 ```
 
-[C++ vector的用法（整理）](https://blog.csdn.net/wkq0825/article/details/82255984)
+#### list
 
-[vector容器详细方法·菜鸟教程](https://www.runoob.com/w3cnote/cpp-vector-container-analysis.html)
+#### deque
+
+#### queue
+
+- bool empty() const
+- size_type size() const
+- T& front() 返回指向队首元素的引用
+- T& back() 返回指向队尾元素的引用
+- void push(const T& x) 在队尾插入x
+- void pop() 删除队首元素
+
+#### stack
+
+- bool empty() const
+- size_type size() const
+- T& top() 返回指向栈顶元素的引用
+- void push(const T& x) 在栈顶插入x
+- void pop() 删除栈顶元素
+
+### 关联容器
 
 #### Map
 

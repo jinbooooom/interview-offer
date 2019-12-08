@@ -7,25 +7,32 @@ STL 主要由两部分组成：一是容器，二是操作容器的泛型算法�
 ### 所有容器的共同操作(包括string 类)
 
 - == 和 != 返回 true 或者 false，两个容器是否相等
-
 - = 赋值，将一个容器赋给另一个容器
-- empty()
-- size()
+- size()  返回当前的容器的元素数量
+- empty()  判断容器是否为空，这个操作比 size() == 0 更有利率
+- max_size() 容器所能容纳的最大元素数量
 - clear() 删除所有元素
-- begin() 
-- end()
-- insert() 将单一或者某一个范围的元素插入容器内
+- begin() ，rbegin()
+- end(), rend()
+- insert(it, val) 将单一或者某一个范围的元素插入容器内
 - erase() 将容器内的单一或者某一个范围内的元素删除
+- swap()
 
 【ESC 76】
 
 ### 序列容器
 
-- vector 以一块连续性内存来存放数据，适合随机访问，不适合插入/删除（如果在末尾插入/删除效率一样，在中间插入/删除就需要移动元素）
-- list 以双向链接而非连续内存来存储内容，适合插入删除而不适合随机访问。
-- deque (双向队列)以连续内存存储数据，但是只能对最前端/末端的元素进行插入/删除操作
-- queue 队列
-- stack 栈
+可序群集，每个元素位置取决于插入时机和地点，和元素值无关。如果以追加方式置入元素，那么他们的排列次序将和置入次序一致。
+
+- vector: 以一块连续性内存来存放数据，适合随机访问，不适合插入/删除（在末尾插入/删除效率很高，在中间插入/删除就需要移动元素，不提供在首部插入的操作，因为效率低）
+- list: 以**双向链接**而非连续内存来存储内容，适合插入/删除而不适合随机访问。
+- deque: (双向队列)以连续内存存储数据，但是只能对最前端/末端的元素进行插入/删除操作
+
+**容器配接器：**
+
+- stack: 栈
+- queue: 队列
+- priority queue: 优先队列
 
 <img src="sources\qe_vec.png" style="zoom: 100%;" />
 
@@ -38,6 +45,33 @@ STL 主要由两部分组成：一是容器，二是操作容器的泛型算法�
 - vec.push_back()
 - vec.pop_back()
 - vec.insert(it, val)
+- size()  返回当前的容器的元素数量
+- empty()  判断容器是否为空，这个操作比 size() == 0 更有利率
+- max_size() 容器所能容纳的最大元素数量
+- capacity() 重新分配空间前所能容纳的元素最大数量，看 reserve 预留多少
+- reserve() 预留多少个元素
+
+```C++
+int main(int argc, char* argv[]) {
+	vector<string> sen;
+	sen.reserve(100);// 预留 100 个string空间，如果不预留，那么 capacity() 的输出就和 size() 一样
+	vector<string>::iterator it = sen.begin();
+	sen.push_back("hello");
+	sen.push_back("world");
+	sen.push_back("!");
+	sen.insert(it, "ok");
+
+	cout << sen.size() << endl;;		// 4
+	cout << sen.max_size() << endl;		// 153391689
+	cout << sen.capacity() << endl;		// 100
+
+	it = sen.begin();	// 注意，insert() 会使插入的位置之后的所有 iterator 失效，故重新赋值
+	vector<string>::iterator finish = sen.end();
+	for (; it != finish; ++it)			// ok hello world !
+		cout << *it << " ";				
+	getchar();
+}
+```
 
 ```C++
 vector<vector<char> >vec(row, vector<char>(col,'#'));//二维数组初始化
@@ -45,7 +79,21 @@ vector<vector<char> >vec(row, vector<char>(col,'#'));//二维数组初始化
 
 #### list
 
+- insert(pos, elem)
+- push_back(elem)
+- pop_back()
+- push_front()
+- pop_front()
+
+- remove(val) 移除所有值为 val 的元素
+- remove_if(op) 移除所有造成op(elem)结果为 true 的元素
+- erase(pos)
+- erase(beg, end)
+- clear()
+
 #### deque
+
+与 vector 接口几乎一样，deque 适合在两端操作，vector 没有在首部插入/删除的方法。要注意，在中间插入元素会导致 references、pointers、iterators 失效（两端没关系）
 
 #### queue
 
@@ -66,7 +114,40 @@ vector<vector<char> >vec(row, vector<char>(col,'#'));//二维数组初始化
 
 ### 关联容器
 
-#### Map
+已序群集，元素位置取决于特定的排序准则，如果置入元素，那么它们的位置取决于元素值，而与置入的次序无关。
+
+自动排序造成一个重要限制：你不能直接改变元素值（只读），因为这样会打乱原本正确的顺序。因此，要改变元素值，必须先删除旧元素，再插入新元素。
+
+- set: 内部元素有序，且只出现一次
+- multiset: 与 set 相同，但允许重复的元素
+- map: 键值对，每个键只出现一次
+- multimap: 与 map 相同，
+
+#### set
+
+Set 由一群 key 组合而成，对于任何 key 值，set 只能存一份。
+
+C++ 中，set 元素默认按照 less-than 顺序排列，这点跟 python 不一样，python里的 set 是无序的。
+
+```C++
+int ia[] = {3, 8, 8, 5, 3, 1, 5, 1};
+vector<int> vec(ia, ia+8);
+set<int> iset(vec.begin(), vec.end());
+set<int>::iterator it = iset.begin();
+for (; it != iset.end(); ++it)
+    cout << *it << ' ';
+//输出 1 3 5 8
+```
+
+- insert()  插入元素
+- set_intersection()
+- set_union()
+- set_difference()
+- set_symmetric_difference()
+
+#### multiset
+
+#### map
 
 ```C++
 #include<iostream>
@@ -96,26 +177,7 @@ if (words.count("python")) {
 }
 ```
 
-#### Set
-
-Set 由一群 key 组合而成，对于任何 key 值，set 只能存一份。
-
-C++ 中，set 元素默认按照 less-than 顺序排列，这点跟 python 不一样，python里的 set 是无序的。
-```C++
-int ia[] = {3, 8, 8, 5, 3, 1, 5, 1};
-vector<int> vec(ia, ia+8);
-set<int> iset(vec.begin(), vec.end());
-set<int>::iterator it = iset.begin();
-for (; it != iset.end(); ++it)
-    cout << *it << ' ';
-//输出 1 3 5 8
-```
-
-- insert()
-- set_intersection()
-- set_union()
-- set_difference()
-- set_symmetric_difference()
+#### multimap
 
 ### 算法
 

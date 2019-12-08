@@ -1743,22 +1743,153 @@ C++ 也不是绝对类型安全的，但使用得当，它将远比C更有类型
 
 ## STL
 
+STL包括两部分内容：容器和算法。重要的还有融合这二者的迭代器。
+
+**迭代器是STL的精髓，它提供了一种方法，使它能够按照顺序访问某个容器所含的各个元素，但无需暴露该容器的内部结构。它将容器和算法分开，好让这二者独立设计。**
+
+容器，即存放数据的地方。比如array等。
+
+在STL中，容器分为两类：序列式容器和关联式容器。
+
+**序列式容器**，其中的元素不一定有序，但都可以被排序。如：vector、list、deque、stack、queue、heap、priority_queue。
+
+**关联式容器**，内部结构基本上是一颗平衡二叉树。所谓关联，元素按照一定的规则存放（元素位置取决于特定的排序准则）。如：RB-tree、set、map、multiset、multimap、hashtable、hash_set、hash_map、hash_multiset、hash_multimap。
+
+下面各选取一个作为说明。
+
+vector：它是一个动态分配存储空间的容器。区别于c++中的array，array分配的空间是静态的，分配之后不能被改变，而vector会自动重分配（扩展）空间。
+
+**使用 vector 时需要注意：每次插入和移除元素的时候，都会使作用点之后的各元素 references、pointers、iterators 失效，如果插入操作引发内存重新分配，那么该容器上所有的 references、pointers、iterators 都会失效。**
+
+set：其内部元素会根据元素的键值自动被排序。区别于map，它的键值就是实值，而map可以同时拥有不同的键值和实值。
+
+算法，如排序，复制……以及个容器特定的算法。这点不用过多介绍，主要看下面迭代器的内容。
+
 ### map 与 hashmap 区别
 
 - 底层数据结构不同：map 是红黑树（查找时间复杂度log(n)），hashmap 是哈希表（查找时间复杂度O(1)）
+
+  set 底层是平衡二叉树
+
 - map 的优点在于元素可以自动按照键值排序，而 hash map 的优点在于它的各项操作的平均时间复杂度接近常数
+
 - map 属于标准的一部分，而 hash map 则不是
+
 - STL的map底层是用红黑树实现的，查找时间复杂度是log(n)； 
 
 什么时候用map，什么时候用hash_map？
 
 这个要看具体的应用，不一定常数级别的 hash_map 一定比 log(n) 级别的 map 要好， hash_map 的 hash 函数以及解决地址冲突等都要耗时间，而且众所周知 hash 表是以空间换时间的，因而 hash_map 的内存消耗肯定要大，一般情况下，如果记录非常大，考虑 hash_map，查找效率会高很多，如果要考虑内存消耗，则要谨慎使用hash_map。
 
+### STL中的 remove 和 erase 区别
+
+- erase 一般作为一个 container 的成员函数，是真正删除的元素，是物理上的删除（迭代器访问不到了）
+
+- algorithm 中的 remove 只是简单的把要 remove 的元素移到了容器最后面，然后其余元素前移，是逻辑上的删除，此时容器的 size 不变化。因为 algorithm 通过迭代器操作，不知道容器的内部结构，所以无法做到真正删除。
+
 ### 智能指针
 
-`std::auto_ptr<char> ptr(new char[10]);`
+`std::auto_ptr<string> ptr(new string);`
 
+```C++
+auto_ptr<char*> ap(new char*);
+*ap = "ap1";
+*ap = "ap2";
+char **bp = new char*;
+*bp = "bp1";
+cout << *ap << endl;	// "ap2"
+cout << *bp << endl;	// "bp1"
+```
+
+```C++
+#include <memory>
+
+double *p = new double;
+shared_ptr<double> pshared(p);		// 合法，显示转换，explicit conversion
+//shared_ptr<double> pshared = p;  // 不合法，隐式转换，implicit conversion
+```
+
+```C++
+int main(int argc, char* argv[]) {
+	string str("hello world!");
+	// 程序能运行，但是在要释放 pshared 指向的内存时会出错
+	// 因为 str 不是存在堆中，当 pshared 过期时，delete 运算符会用于非堆内存，造成错误
+	shared_ptr<string> pshared(&str);
+	cout << *pshared << endl;
+	getchar();
+}
+```
+
+- auto_ptr 是C++98提供的解决方案，C++11已经摒弃，并提供了以下几种方案
 - shared_ptr 被称为共享指针，用于管理多个智能指针共同拥有的动态分配对象， 
 -   unique_ptr 唯一拥有指定的对象，相比普通指针，拥有RAII的特性使得程序出现异常时，动态资源可以得到释放。 
 -  weak_ptr 是为了配合shared_ptr而引入的一种智能指针，因为它不具有普通指针的行为，没有重载operator*和->,它的最大作用在于协助shared_ptr工作，像旁观者那样观测资源的使用情况。 
+
+#### 为什么摒弃 auto_ptr
+
+```C++
+auto_ptr<string> p1(new string("hello"));
+auto_ptr<string> p2;
+p2 = p1;		
+// 当 p1, p2 过期时，将删除同一个对象两次
+```
+
+**解决之道：**
+
+- 定义复制运算符，使之执行深复制
+- 建立所有权概念，使同时只有一个智能指针可拥有它。这样，只有拥有对象的智能指针有权析构该对象，这是auto_ptr 的策略，unique_ptr 的策略更严格。
+- 创建智能更高的指针，跟踪引用特定对象的智能指针数。这称为引用计数。
+
+```C++
+int main(int argc, char* argv[]) {
+	auto_ptr<string> p1(new string("hello"));
+	auto_ptr<string> p2;
+	cout << *p1 << endl;  // 正常打印
+	p2 = p1;			  // p1 丧失了对 string 对象的所有权，p1 此时是空指针
+	cout << *p1 << endl;  // 编译通过，但运行时报错，因为试图提领空指针
+	getchar();
+}
+//	将 auto_ptr 换成 unique_ptr，编译器认为 p2 = p1; 非法，在编译阶段报错（因为 p1 不是临时右值）。 
+//	将 auto_ptr 换成 shared_ptr，编译运行阶段都没问题，正常打印。
+//	shared_ptr 采用的策略是引用计数，赋值时，计数加一，过期时，计数减一。仅当最后一个指针过期时，才调用 delete。
+```
+
+```C++
+shared_ptr<string> p1(new string("hello"));
+shared_ptr<string> p2(p1);		// 合法，将右值 p1 赋给 p2
+```
+
+```C++
+unique_ptr<string> p1(new string("hello"));
+//shared_ptr<string> p2(p1);		// 不合法，右值 p1 是 unique_ptr，若能赋给 p2，则 p1，p2 指向同一个对象，导致 p1 不合法，此语句编译不通过
+```
+
+```C++
+unique_ptr<string> foo() {
+	unique_ptr<string> p1(new string("hello"));
+	return p1;
+}
+// 函数返回的 unique_ptr<string> 为临时右值，此时可赋给另一个 unique_ptr 型指针
+int main(int argc, char* argv[]) {
+	unique_ptr<string> p2(foo());
+}
+```
+
+### 基于范围的 for 循环
+
+```C++
+int main(int argc, char* argv[]) {
+	int arr[10] = {1, 2, 3, 4, 5, 6};
+	for (int &x : arr)		// 只有使用引用 & 才能通过 x 修改 arr 里的值
+	{
+		cout << (x % 2 ? "奇" : "偶") << ' ';
+		x = x + 1;
+	}
+	cout << endl;
+	for (int x : arr) cout << x << ' ';
+	getchar();
+}
+//	奇 偶 奇 偶 奇 偶 偶 偶 偶 偶
+//	2 3 4 5 6 7 1 1 1 1
+```
 

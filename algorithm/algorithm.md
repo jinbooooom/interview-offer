@@ -4,8 +4,6 @@
 
 ### 栈
 
-﻿
-
 ### 队列
 
 **队空与队满**
@@ -585,6 +583,183 @@ public:
             pSlow = pSlow->next;
         }
         return pSlow;
+    }
+};
+```
+
+### 链表中环的结点
+
+>  给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。 
+>
+> `ListNode* EntryNodeOfLoop(ListNode* pHead)`
+
+**提示：**
+
+*假设有环，且知道环中节点的个数设为 n，那么设置两个指针 p1, p2 分别指向头节点，现在使 p2 先移动 n 步，p1 不动，再使 p1, p2 同时移动，那么当 p1, p2 相遇时，p1 指针指向的节点就是入口节点。*
+
+***如何求环中节点个数 n?***
+
+*设置两个指针，一快一慢，最开始都指向头节点。快指针 pFast 每次移动 2 步，慢指针 pSlow 每次移动 1 步，若 pFast 能到达尾节点，则说明无环；若 pFast 能相遇，说明有环，当相遇时，慢指针 pSlow 保持位置不变，快指针改为每次移动 1 步，直到再次与慢指针相遇，移动了多少步，环中就含有多少个节点。*
+
+
+```C++
+// 牛客网通过率0%，复杂度过高？
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead)
+    {
+        if (pHead == nullptr)
+            return nullptr;
+        ListNode* pFast = pHead;
+        ListNode* pSlow = pHead;
+        int NodeOfLoop = 1;
+        
+        while (pFast)
+        {
+            if (pFast->next && pFast->next->next)
+            {
+                pFast = pFast->next->next;
+                pSlow = pFast->next;
+            }
+            else
+                return nullptr;
+            
+            if (pFast == pSlow)
+            {
+                pFast = pFast->next;
+                //NodeOfLoop++;
+                while (pFast != pSlow)
+                {
+                    pFast = pFast->next;
+                    NodeOfLoop++;
+                }
+                if (NodeOfLoop == 1)        // 环中只有一个结点，pSlow 就是环的入口结点
+                    return pSlow;
+                break;
+            }
+        }
+        
+        ListNode* p1 = pHead;
+        ListNode* p2 = pHead;
+        while (NodeOfLoop)
+        {
+            p2 = p2->next;
+            NodeOfLoop--;
+        }
+        while (p1 != p2)
+        {
+            p2 = p2->next;
+            p1 = p1->next;
+        }
+        return p1;
+    }
+};
+```
+
+### 反转链表
+
+>  输入一个链表，反转链表后，输出新链表的表头。 
+>
+> `ListNode* ReverseList(ListNode* pHead)`
+
+**提示：**
+
+*用多个指针分别记录当前节点，以及它的前驱和后继。*
+
+
+```C++
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        if (pHead == nullptr || pHead->next == nullptr)  // 链表为空或者只含有一个结点
+            return pHead;
+
+        ListNode* pre = nullptr;
+        ListNode* pNode = pHead;
+        ListNode* pNext = pNode->next;
+        pNode->next = pre;
+        
+        while (pNext)
+        {
+            if (pNext->next)
+            {
+                ListNode* pNextNext = pNext->next;
+                pre = pNode;
+                pNode = pNext;
+                pNext = pNextNext;
+                pNode->next = pre;
+            }
+            else
+            {
+                pNext->next = pNode;
+                return pNext;
+            }
+        }
+    }
+};
+```
+
+### 合并两个有序的链表
+
+>  输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。 
+>
+> `ListNode* Merge(ListNode* pHead1, ListNode* pHead2)`
+
+**提示：**
+
+*非常类似归并排序的归并过程：*
+
+*若两链表任何一个为空，则返回剩下的那一个；*
+
+*若均不为空，则找到两个链表中值小的那个，添加到新链表尾部；*
+
+*若最后有某一个链表为空，说明它的节点都被添加到新链表上，直接把另一个非空链表剩下部分添到到新链表尾部*
+
+
+```C++
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+        if (pHead1 == nullptr)
+            return pHead2;
+        else if (pHead2 == nullptr)
+            return pHead1;
+        
+        ListNode* head = nullptr;
+        if (pHead1->val < pHead2->val)
+        {
+            head = pHead1;
+            pHead1 = pHead1->next;
+        }
+        else 
+        {
+            head = pHead2;
+            pHead2 = pHead2->next;
+        }
+        
+        ListNode* p = head;
+        while (pHead1 && pHead2)
+        {
+            if (pHead1->val < pHead2->val)
+            {
+                p->next = pHead1;
+                pHead1 = pHead1->next;
+                p = p->next;
+            }
+            else
+            {
+                p->next = pHead2;
+                pHead2 = pHead2->next;
+                p = p->next;
+            }
+        }
+        
+        if (pHead1)
+            p->next = pHead1;
+        else if (pHead2)
+            p->next = pHead2;
+        return head;
     }
 };
 ```

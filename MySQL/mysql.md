@@ -154,7 +154,7 @@ mysql> SELECT vend_id, vend_name, vend_city, vend_state FROM vendors ORDER BY ve
 # 指定排序方向，按价格降序，按名称升序
 mysql> SELECT prod_id, prod_price, prod_name FROM products ORDER BY prod_price DESC,prod_name;
 
-# 价格和名称都升序
+# 价格和名称都降序
 mysql> SELECT prod_id, prod_price, prod_name FROM products ORDER BY prod_price DESC,prod_name DESC;
 
 ```
@@ -337,7 +337,7 @@ mysql> SELECT cust_id, order_num, order_date FROM orders
 ```mysql
 # 计算商品的数量，价格和以及均价（注意 AS 用法）
 # 注意 COUNT(*) 对表中行的数目统计。不管行中包含的是空值还是非空值
-# COUNT(column) 对特定列中具有值得行进行统计，不包含 NULL 值
+# COUNT(column) 对特定列中具有值的行进行统计，不包含 NULL 值
 mysql> SELECT COUNT(*), SUM(prod_price), AVG(prod_price) AS '均价' FROM products;
 +----------+-----------------+-----------+
 | COUNT(*) | SUM(prod_price) | 均价      |

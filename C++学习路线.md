@@ -1,12 +1,17 @@
-ÈëÃÅ£º
-¡¶C++ Primer Plus¡·
-¡¶Essential C++¡·
-½ø½×£º
-¡¶C++±ê×¼¿â¡·
-¡¶ÉîÈëÀí½âC++¶ÔÏóÄ£ÐÍ¡·
-¡¶STLÔ´ÂëÆÊÎö¡·
-×·ÖðÐÔÄÜÓëÓÅÑÅ£º
-¡¶Effective STL¡·
-¡¶Effective C++¡·
-¡¶More Effective C++¡·
-¡¶Exceptional C++¡·
+å…¥é—¨ï¼š
+
+- ã€ŠC++ Primer Plusã€‹
+- ã€ŠEssential C++ã€‹
+
+è¿›é˜¶ï¼š
+
+- ã€ŠC++æ ‡å‡†åº“ã€‹
+- ã€Šæ·±å…¥ç†è§£C++å¯¹è±¡æ¨¡åž‹ã€‹
+- ã€ŠSTLæºç å‰–æžã€‹
+
+è¿½é€æ€§èƒ½ä¸Žä¼˜é›…ï¼š
+
+- ã€ŠEffective STLã€‹
+- ã€ŠEffective C++ã€‹
+- ã€ŠMore Effective C++ã€‹
+- ã€ŠExceptional C++ã€‹

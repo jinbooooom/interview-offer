@@ -55,7 +55,7 @@ find：这个命令用于查找文件，功能强大。例如：find ./*.txt，�
 find *[[:lower:]123] # 以小写字母或数字1、2、3中的任一个结尾的任一文件
 ```
 ### file 用于确定文件的种类
-```
+```markdown
 # 比如 1.txt 其实是 1.JPEG 重命名的，$ file 1.txt 显示
 1.txt: JPEG image data, JFIF standard 1.01, resolution (DPI), density 72x72, segment length 16, baseline, precision 8, 440x440, frames 3
 ```
@@ -73,7 +73,7 @@ mkdir dir1 dir2 path_to/dir3
 ```
 
 ### cp 复制文件和目录
-- `cp path_to1/file1 path_to2/file2 file2`若与fil1同名，则覆盖，加上 -i 选项，区别在于覆盖之前通知用户是否覆盖 `cp -i path_to1/file1 path_to2/file2 file2`
+- `cp path_to1/file1 path_to2/file2 file2`若与 file1同名，则覆盖，加上 -i 选项，区别在于覆盖之前通知用户是否覆盖 `cp -i path_to1/file1 path_to2/file2 file2`
 - `cp file1 file2 dir1` 把file1,file2复制到目录dir里，前提dir存在
 - `cp -r dir1 dir2` 把文件夹dir1递归地复制到dir2（不存在则自动创建）
 
@@ -162,14 +162,22 @@ $ less 1a/1a.txt
 ```
 
 符号表示法
-u
-g
-o
-a
+u：所有者权限
+
+g：组权限
+
+o：其他所有用户
+a：所有用户
+
+u+x/u-x：为文件所有者增加/删除可执行权限
+
++x，也即 a+x
+
+u+x，go = rx：为文件所有者添加可执行权限，同时设置所属群组和其它用户具有读权限和可执行权限。
 
 ### 进程
 - ps #显示当前终端进程
-- ps x # 显示所有终端所控制的进程，TTY中的?表示表示没有控制终端，STAT是state的缩写，显示的是当前进程的状态,S表示睡眠状态，进程不在运行，而是在等待。
+- ps x # 显示所有终端所控制的进程，TTY中的?表示没有控制终端，STAT是state的缩写，显示的是当前进程的状态,S表示睡眠状态，进程不在运行，而是在等待。
 
 ```
  PID TTY      STAT   TIME COMMAND

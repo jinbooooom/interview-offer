@@ -1618,29 +1618,46 @@ extern 存储类用于提供一个全局变量的引用，全局变量对所有�
 
 ### 类型转换运算符
 
- C++ 中四种类型转换是：static_cast, dynamic_cast, const_cast, reinterpret_cast 
+ C++ 中四种类型转换是：`static_cast, dynamic_cast, const_cast, reinterpret_cast `
 
-- const_cast 
+```C++
+cast-name<type>(expression) 
+// type是转换的目标类型，expression 是被转换的值。
+```
 
-  用于将 const 变量转为非 const 
+- const_cast(常量转换)
 
-- static_cast
+  用于将 const 变量转为非 const ，也可以去除 volatile，除此之外不允许任何类型转换。即常量指针被转换成非常量指针，并且仍然指向原来的对象；常量引用被转换成非常量引用，并且仍然引用原来的对象。
 
-  用于各种隐式转换，比如非 const 转 const，void* 转指针等， static_cast 能用于多态向上转化，如果向下转能成功但是不安全，结果未知； 
+- static_cast(静态转换)
 
-- dynamic_cast
+  任何编写程序时能够明确的类型转换都可以使用static_cast（static_cast不能转换掉底层const，volatile和__unaligned属性）。由于不提供运行时的检查，所以叫static_cast，因此，需要在编写程序时确认转换的安全性。
 
-  用于动态类型转换。只能用于含有虚函数的类，用于类层次间的向上和向下转化。只能转指针或引用。向下转化时，如果是非法的对于指针返回 nullptr，对于引用抛异常。要深入了解内部转换的原理。
+  主要在以下几种场合中使用：
 
-  向上转换：指的是子类向基类的转换；
+  - 用于类层次结构中，父类和子类之间指针和引用的转换；进行上行转换，把子类对象的指针/引用转换为父类指针/引用，这种转换是安全的；进行下行转换，把父类对象的指针/引用转换成子类指针/引用，这种转换是不安全的，需要编写程序时来确认；
+  - 用于基本数据类型之间的转换，例如把int转char，int转enum等，需要编写程序时来确认安全性；
+  - 把void指针转换成目标类型的指针（这是极其不安全的）；
+
+- dynamic_cast(动态转换)
+
+  用于动态类型转换。**只能用于含有虚函数的类，用于类层次间的向上和向下转化，只能转指针或引用**。向下转化时，如果是非法的对于指针返回 nullptr，对于引用抛异常。要深入了解内部转换的原理。
+
+  向上转换：指的是子类向基类的转换。此时与static_cast和隐式转换一样，都是非常安全的。 注意菱形继承中的向上转换要指明路径。
 
   向下转换：指的是基类向子类的转换；
 
-  它通过判断在执行到该语句的时候变量的运行时类型和要转换的类型是否相同来判断是否能够进行向下转换。 
+  它通过变量运行时的类型和要转换的类型是否相同，来判断是否能够进行向下转换。 
 
-- reinterpret_cast
+  **为什么只能用于含有虚函数的类？**
+
+  因为类中存在虚函数，说明它可能有子类，这样才有类型转换的情况发生，由于运行时类型检查需要运行时类型信息，而这个信息存储在类的虚函数表中，只有定义了虚函数的类才有虚函数表。 
+
+- reinterpret_cast(重解释)
 
   几乎什么都可以转，比如将int转指针，可能会出问题，尽量少用； 
+
+[C++类型转换](https://zhuanlan.zhihu.com/p/27966225)
 
 [C++中的4种类型转换](https://blog.csdn.net/weixin_42482896/article/details/88939439)
 
@@ -1936,6 +1953,26 @@ hash_map, hash_set, hash_multimap, and hash_multiset 采用哈希表实现，不
  AVL 树是高度平衡的，频繁的插入和删除，会引起频繁的 rebalance，导致效率下降；红黑树不是高度平衡的，算是一种折中，插入最多两次旋转，删除最多三次旋转。 
 
 所以红黑树在查找，插入删除的性能都是 O(logn)，且性能稳定，所以 STL 里面很多结构包括 map 底层实现都是使用的红黑树。 
+
+#### STL 关联容器底层实现总结
+
+**有序关联容器**底层实现为红黑树，增删改查时间复杂度O(n)。
+
+set，multiset，map，multimap。
+
+**无序关联容器**底层实现链式哈希表 ，增删改查时间复杂度O(1)。
+
+unordered_set，unordered_multiset，unordered_map，unordered_multimap。
+
+unordered_multiset，unordered_map，unordered_multimap 
+
+unordered_map，unordered_multimap 
+
+unordered_multimap 
+
+#### map 和 unordered_map 的性能对比 
+
+map内部是红黑树，在插入元素时会自动排序，而无序容器 unordered_map 内部是哈希表，通过哈希而不是排序来快速操作元素，使得效率更高。当你不需要排序时选择 unordered_map 的效率更高。 
 
 ### STL中的 remove 和 erase 区别
 

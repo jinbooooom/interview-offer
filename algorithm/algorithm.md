@@ -535,7 +535,6 @@ void deleteNode(ListNode* pListHead, ListNode* pToBeDeleted)
 >`ListNode* deleteDuplication(ListNode* pHead)`
 
 ```C++
-// 递归方法本地调试通过，牛客网栈溢出
 class Solution {
 public:
     ListNode* deleteDuplication(ListNode* pHead)
@@ -548,7 +547,7 @@ public:
             pHead->next = deleteDuplication(pNext);
             return pHead;
         }
-        while(pHead->val == pNext->val && pNext != nullptr)
+        while(pHead->val == pNext->val && pNext->next != nullptr)
         {
             pNext = pNext->next;
         }
@@ -619,7 +618,6 @@ public:
 
 
 ```C++
-// 牛客网通过率0%，复杂度过高？
 class Solution {
 public:
     ListNode* EntryNodeOfLoop(ListNode* pHead)
@@ -635,7 +633,7 @@ public:
             if (pFast->next && pFast->next->next)
             {
                 pFast = pFast->next->next;
-                pSlow = pFast->next;
+                pSlow = pSlow->next;
             }
             else
                 return nullptr;

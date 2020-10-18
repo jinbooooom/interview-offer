@@ -12,4 +12,4 @@
 
 - [Linux 简单命令]( ./Linux/Linux.md )(此部分将在[新仓库](https://github.com/jinbooooom/linux)持续更新)
 
-- [深度学习]( ./vision/DL/DL.md )（不再更新）
+- [深度学习]( ./vision/DL/DL.md )
